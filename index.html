@@ -275,7 +275,9 @@
             padding: 18px 20px;
             display: grid;
             gap: 14px;
-            line-height: 1.6
+            line-height: 1.6;
+            place-items: center;
+            text-align: center;
         }
 
         .modal .tags {
@@ -447,17 +449,14 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
         }
 
-        /* Panel derecho centrado */
         .flota-right {
             padding: 18px;
             display: grid;
             grid-template-rows: auto 1fr auto;
-            /* Título / grid / botones */
             gap: 12px;
             background: rgba(255, 255, 255, .02);
             min-height: 0;
             justify-items: center;
-            /* centra horizontalmente */
         }
 
         .crew-title {
@@ -466,31 +465,23 @@
             text-align: center;
         }
 
-        /* Grilla uniforme, centrada y responsiva */
         .crew-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
             grid-auto-rows: 150px;
-            /* alto fijo de cada tarjeta */
             gap: 14px;
             width: 100%;
             max-width: 520px;
-            /* evita que se abra demasiado con pocas filas */
             place-content: center;
-            /* centra en ambos ejes si sobra espacio */
             justify-items: center;
-            /* centra cada tarjeta horizontalmente */
             align-items: center;
-            /* centra cada tarjeta verticalmente */
             padding: 4px 8px;
             overflow: auto;
-            /* scroll si hay muchos */
         }
 
         .crew-item {
             width: 110px;
             height: 150px;
-            /* debe coincidir con grid-auto-rows */
             display: grid;
             grid-template-rows: auto auto 1fr;
             justify-items: center;
@@ -518,7 +509,6 @@
             height: 100%;
             object-fit: cover;
             object-position: center;
-            /* recorta al círculo */
         }
 
         .crew-name {
@@ -565,13 +555,14 @@
 
         .mision-card {
             width: min(1000px, 95vw);
-            height: min(90vh, 750px);
+            /* **ELIMINA ESTA LÍNEA** para que la altura sea flexible */
+            /* height: min(80vh, 750px); */
             background: #0d1730;
             border-radius: 20px;
             box-shadow: 0 0 30px rgba(0, 0, 0, .5);
             display: grid;
+            /* La suma de las franjas se adaptará */
             grid-template-rows: auto 4fr 1fr auto;
-            /* banner / imagen (80) / desc (20) / botones */
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, .12);
         }
@@ -586,16 +577,15 @@
         }
 
         .mision-image {
-            background: #0a1326;
-            display: grid;
-            place-items: center;
+            /* Define una altura máxima para evitar que el contenido visual sea demasiado grande */
+            max-height: 400px;
+            /* Ajusta este valor si lo necesitas */
         }
 
         .mision-image img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            /* se ve completa la diapositiva */
         }
 
         .mision-desc {
@@ -613,6 +603,59 @@
             padding: 12px 14px;
             background: rgba(255, 255, 255, .02);
             border-top: 1px solid rgba(255, 255, 255, .06);
+        }
+
+        /* === QR 15/70/15 === */
+        .qr-card {
+            width: min(900px, 95vw);
+            height: clamp(520px, 85dvh, 720px);
+            /* ⬅️ límite vertical */
+            background: #0d1730;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+            display: grid;
+            grid-template-rows: auto minmax(0, 1fr) auto auto;
+            /* ⬅️ imagen crece/encoge */
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, .12);
+        }
+
+        .qr-banner {
+            display: grid;
+            place-items: center;
+            font-weight: 900;
+            letter-spacing: .3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            color: #071126;
+            padding: 8px 16px;
+            text-align: center;
+        }
+
+        .qr-image img {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            /* ⬅️ nunca se desborda */
+            display: block;
+        }
+
+
+        .qr-image img {
+            max-width: 95%;
+            max-height: 95%;
+            object-fit: contain;
+        }
+
+        .qr-desc {
+            display: grid;
+            place-items: center;
+            padding: 10px 16px;
+            text-align: center;
+            font-size: 1rem;
+            color: #dfe9ff;
+            background: rgba(255, 255, 255, .04);
         }
     </style>
 </head>
@@ -695,12 +738,9 @@
     <div class="final-backdrop" id="finalBackdrop">
         <div class="final-card">
             <h1>¡MISIÓN CUMPLIDA!</h1>
-            <p>
-                La flota de <strong>Estrategia de Gobierno y Monitoreo del Dato</strong><br />
-                ha navegado todas sus misiones con éxito.<br /><br />
-                Gracias por acompañarnos en este recorrido.<br />
-                ¡Ahora continuamos con el resto de la travesía!
-            </p>
+            <p>La flota de <strong>Estrategia de Gobierno y Monitoreo del Dato</strong><br />ha navegado todas sus
+                misiones con éxito.<br /><br />Gracias por acompañarnos en este recorrido.<br />¡Ahora continuamos con
+                el resto de la travesía!</p>
         </div>
     </div>
 
@@ -722,18 +762,30 @@
         </div>
     </div>
 
-
-    <!-- Showcase de MISIÓN de Flota -->
+    <!-- MISIÓN / ESPECIALES (80/20) -->
     <div class="mision-backdrop" id="misionBackdrop" aria-hidden="true">
         <div class="mision-card">
-            <div class="mision-banner" id="misionBanner">Misión de la Flota: Nombre</div>
-            <div class="mision-image">
-                <img id="misionImg" src="" alt="Diapositiva / imagen de misión">
-            </div>
-            <div class="mision-desc" id="misionDesc">Aquí va la explicación de la misión.</div>
+            <div class="mision-banner" id="misionBanner">Título</div>
+            <div class="mision-image"><img id="misionImg" src="" alt="Diapositiva / imagen"></div>
+            <div class="mision-desc" id="misionDesc">Texto</div>
             <div class="mision-actions">
                 <button class="btn ghost" id="btnMisionSkip" title="Saltar">Saltar</button>
                 <button class="btn primary" id="btnMisionContinue" title="Continuar">Continuar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR 15/70/15 -->
+    <div class="mision-backdrop" id="qrBackdrop" aria-hidden="true">
+        <div class="qr-card">
+            <div class="qr-banner" id="qrBanner">Tarea de la Flota</div>
+            <div class="qr-image"><img id="qrImg" src="" alt="QR Kahoot/Menti"></div>
+            <div class="qr-desc" id="qrDesc">Ingresa al QR y ayuda con la misión de la Flota.</div>
+
+            <!-- 🔹 ESTA PARTE ASEGURA EL BOTÓN DE CONTINUAR -->
+            <div class="mision-actions">
+                <a class="btn ghost" id="btnQrOpen" target="_blank" rel="noopener noreferrer">Abrir enlace</a>
+                <button class="btn primary" id="btnQrClose">Continuar</button>
             </div>
         </div>
     </div>
@@ -743,92 +795,128 @@
         const ROWS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
         const COLS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
+        // Orden del recorrido
         const SCRIPTED_ORDER = [
-            'MISS',
-            'FLOTA1', 'MISS', 'MISION1','FLOTA2', 'MISS', 'FLOTA3', 'FLOTA4',
-            'MISS', 'MISS', 'FLOTA5', 'MISS',
-            'MISION1', 'MISION2', 'MISS', 'MISION3', 'MISS', 'MISION4', 'MISS', 'MISION5'
+            'MISION1', 'FLOTA1', 'FLOTA2', 'FLOTA3', 'FLOTA4', 'FLOTA5',
+            'MISION1', 'MISION2', 'MISION3', 'MISION4', 'MISION5',
+            'MAPA', 'CAPITAN'
         ];
 
-        /* ===== Flotas y Misiones (con covers y crew) ===== */
+        /* ===== Flotas / Misiones / Especiales ===== */
         const FLOTAS = {
             FLOTA1: {
-                type: 'flota', area: 'Uso y Apropiación de TI​',
-                title: 'Flota 1: Uso y Apropiación de TI​',
-                desc: 'Queremos que la tecnología sea parte del día a día en el Ministerio. Por eso ponemos en marcha iniciativas que acercan las soluciones digitales a todos, promoviendo su uso, apropiación y el desarrollo de habilidades tecnológicas en nuestros colaboradores.​​',
+                type: 'flota', area: 'Uso y Apropiación de TI',
+                title: 'Flota 1: Uso y Apropiación de TI',
+                desc: 'Las tecnologías no transforman por sí solas: su verdadero poder nace cuando las personas las entienden, las usan y las hacen propias.',
                 cover: 'https://images.unsplash.com/photo-1691045243893-090cb94b940c?q=80&w=1600&auto=format&fit=crop',
-                misionImg: 'assets/img/slides/slide_mision_1.png', // <-- URL de la diapositiva
-                misionDesc: '"Las tecnologías no transforman por sí solas: su verdadero poder nace cuando las personas las entienden, las usan y las hacen propias."',
                 crew: [
+                    { name: 'Eliana Chacón', role: 'Experto', photo: 'assets/img/fotos/foto_elianachacon.png' },
                     { name: 'Nelson Mateus', role: 'Experto', photo: 'assets/img/fotos/foto_nelsonmateus.png' },
-                    { name: 'Daniel Casas', role: 'Profesional', photo: 'assets/img/fotos/foto_danielcasas.png' },
+                    { name: 'Daniel Casas', role: 'Experto', photo: 'assets/img/fotos/foto_danielcasas.png' },
                     { name: 'Diego Quiroga', role: 'Experto', photo: 'assets/img/fotos/foto_diegoquiroga.png' }
                 ],
-                tags: ['Temas: Uso cotidiano de la tecnología, Apropiación digital, Desarrollo de habilidades tecnológicas, Colaboradores del Ministerio, Transformación cultural']
+                qrImg: 'assets/img/qr_images/qr.png',
+                qrLink: 'https://kahoot.it/', // pon el enlace real
+                qrTop: 'Tarea de la Flota 1: Uso y Apropiación de TI',
+                qrHint: 'Ingresa al QR y ayuda con la misión de la Flota.',
+                flotaHint: 'Queremos que la tecnología sea parte del día a día en el Ministerio. Por eso ponemos en marcha iniciativas que acercan las soluciones digitales a todos, promoviendo su uso, apropiación y el desarrollo de habilidades tecnológicas en nuestros colaboradores.​​',
+                tags: ['Uso cotidiano', 'Apropiación digital', 'Habilidades', 'Transformación cultural']
             },
             FLOTA2: {
-                type: 'flota', area: 'Analítica de Datos e Infraestructura de Datos Estadísticos',
-                title: 'Flota 2: Analítica e Infraestructura de Datos',
-                desc: 'Desarrolla y opera la plataforma y el ecosistema analítico del Ministerio.',
+                type: 'flota', area: 'Analítica de Datos  e Infraestructura de Datos Estadísticos​', title: 'Flota 2: Analítica de Datos  e Infraestructura de Datos Estadísticos​',
+                desc: '“De los datos a las decisiones: construyendo futuro con evidencia.” ​',
                 cover: 'https://images.unsplash.com/photo-1698677671150-d9506d2eb8b9?q=80&w=1600&auto=format&fit=crop',
                 crew: [
-                    { name: 'Arq. Tecnología', role: 'MS Azure' },
-                    { name: 'Arq. de Datos', role: 'Arquitecto' },
-                    { name: 'DBA', role: 'Base de Datos' },
-                    { name: 'Especialista Analítica', role: 'Analytics' },
-                    { name: 'Especialista SIG', role: 'SIG' },
-                    { name: 'Desarrollador Web', role: 'Web' },
-                    { name: 'Diseñador Gráfico', role: 'Diseño' },
-                    { name: 'Esp. Interoperabilidad', role: 'Interoperabilidad' },
-                    { name: 'Admin. Bodega Datos', role: 'Data Warehouse' },
-                    { name: 'Analista de Reqs.', role: 'Requerimientos' }
+                    { name: 'Francisco Maya', role: 'Experto', photo: 'assets/img/fotos/foto_franciscomaya.png' },
+                    { name: 'Estefany Luna', role: 'Experto', photo: 'assets/img/fotos/foto_estefanyluna.png' },
+                    { name: 'José Montaña', role: 'Experto', photo: 'assets/img/fotos/foto_josemontana.png' },
+                    { name: 'Christian Sánchez', role: 'Experto', photo: 'assets/img/fotos/foto_christiansanchez.png' },
+                    { name: 'Osiris Saldaña', role: 'Experto', photo: 'assets/img/fotos/foto_osirissaldana.png' },
+                    { name: 'Nickolay Jimenéz', role: 'Experto', photo: 'assets/img/fotos/foto_nickolayjimenez.png' },
+                    { name: 'Didier Satizabal', role: 'Experto', photo: 'assets/img/fotos/foto_didiersatizabal.png' },
+                    { name: 'Jonathan Piñeros', role: 'Experto', photo: 'assets/img/fotos/foto_jonathanpineros.png' }
                 ],
-                tags: ['Temas: Interoperabilidad, Calidad, Bodega de datos, Inteligencia de Negocios, ML/Big Data, Plataforma digital']
+                flotaHint: 'Queremos que los datos dejen de ser algo lejano o complicado, y se conviertan en aliados para planear, mejorar y transformar lo que hacemos cada día.​',
+                tags: ['Interoperabilidad', 'Calidad', 'Data Warehouse', 'BI', 'ML/Big Data']
             },
             FLOTA3: {
-                type: 'flota', area: 'Infraestructura de Datos Espaciales',
-                title: 'Flota 3: Infraestructura de Datos Espaciales',
-                desc: 'Lidera el componente geoespacial (SIGeográfico y SACD) para análisis y toma de decisión.',
+                type: 'flota', area: 'Infraestructura de Datos Espaciales', title: 'Flota 3: Infraestructura de Datos Espaciales',
+                desc: '“Conectando territorios, decisiones y datos: el poder de una IDE bien estructurada.” ​​',
                 cover: 'https://images.unsplash.com/photo-1712823715723-1f64db0f4c90?q=80&w=1600&auto=format&fit=crop',
                 crew: [
-                    { name: 'Especialista Analítica', role: 'Analytics' },
-                    { name: 'Especialista SIG', role: 'SIG' },
-                    { name: 'Especialista Interoperabilidad', role: 'Interoperabilidad' },
-                    { name: 'Analista de Reqs.', role: 'Requerimientos' }
+                    { name: 'Luis Romero', role: 'Experto', photo: 'assets/img/fotos/foto_luisromero.png' },
+                    { name: 'Javier Blanco', role: 'Experto', photo: 'assets/img/fotos/foto_javierblanco.png' },
+                    { name: 'Jairo Polanco', role: 'Experto', photo: 'assets/img/fotos/foto_jairopolanco.png' }
                 ],
-                tags: ['Temas: SI Geográfico, SACD']
+                flotaHint: 'Queremos que cualquier persona pueda encontrar y usar mapas e información confiable sobre el sector minero y energético, para entender mejor lo que pasa en su territorio, tomar decisiones informadas y aportar al desarrollo del país.​',
+                tags: ['SI Geográfico', 'SACD']
             },
             FLOTA4: {
-                type: 'flota', area: 'Estudios Estratégicos',
-                title: 'Flota 4: Estudios Estratégicos',
-                desc: 'Investigación aplicada y evaluaciones para políticas públicas y decisiones sectoriales.',
+                type: 'flota', area: 'Estudios Estratégicos', title: 'Flota 4: Estudios Estratégicos',
+                desc: '“Decisiones que transforman: estudios estratégicos basados en analítica de datos para una gestión pública inteligente.”​',
                 cover: 'https://images.unsplash.com/photo-1729896972398-c39c4313eada?q=80&w=1600&auto=format&fit=crop',
                 crew: [
-                    { name: 'Matemático/a', role: 'Investigación' },
-                    { name: 'Científico/a de Datos', role: 'Data Science' }
+                    { name: 'Valentina Uribe', role: 'Experto', photo: 'assets/img/fotos/foto_valentinauribe.png' },
+                    { name: 'Fredy Paez', role: 'Experto', photo: 'assets/img/fotos/foto_fredypaez.png' },
+
                 ],
-                tags: ['Temas: Metodologías, Productos estadísticos, Investigaciones y análisis temáticos, Políticas públicas, Evaluaciones de impacto']
+                flotaHint: '“Apoyamos la toma de decisiones en la entidad mediante el análisis de información clave, identificando oportunidades de mejora y proponiendo acciones que generen impacto positivo en la gestión pública”​',
+                tags: ['Metodologías', 'Evaluaciones de impacto']
             },
             FLOTA5: {
-                type: 'flota', area: 'Planificación de la Información',
-                title: 'Flota 1: Planificación de la Información',
-                desc: 'Coordina la planeación integral de la información del Ministerio.',
-                /*cover:'https://images.unsplash.com/photo-1691045243893-090cb94b940c?q=80&w=1600&auto=format&fit=crop',*/
-                cover: 'assets/img/slides/slide_misiones.png',
+                type: 'flota', area: 'Planificación de la Información', title: 'Flota 5: Planificación de la Información',
+                desc: '“Cuando la información tiene rumbo, la gestión tiene impacto.” ​',
+                cover: 'https://images.unsplash.com/photo-1691045243893-090cb94b940c?q=80&w=1600&auto=format&fit=crop',
                 crew: [
-                    { name: 'Experto en Planificación', role: 'Experto', photo: 'assets/img/fotos/foto_fredypaez.png' },
-                    { name: 'Profesional en Planificación', role: 'Profesional', photo: '' }
+                    { name: 'Camilo Linares', role: 'Experto', photo: 'assets/img/fotos/foto_camilolinares.png' },
+                    { name: 'Johanna Salinas', role: 'Experto', photo: 'assets/img/fotos/foto_johannasalinas.png' }
                 ],
-                tags: ['Temas: Identificación Oferta/Demanda, Diagnósticos, Plan Estadístico, Plan de Información, Mapas de información']
+                flotaHint: 'La idea es dejar de improvisar con los datos y empezar a usarlos de manera ordenada, pensando en el presente y en lo que viene, para que cada acción tenga más sentido y más impacto.​',
+                tags: ['Oferta/Demanda', 'Diagnósticos', 'Plan Estadístico', 'Mapas de información']
             },
         };
 
         const MISIONES = {
-            MISION1: { type: 'mision', title: 'Misión 1 – Planificación de la Información', desc: '¿Cuál es la misión de la Flota 1: Planificación de la Información?', tags: ['Kahoot: lanza la pregunta asociada a Flota 1'] },
-            MISION2: { type: 'mision', title: 'Misión 2 – Analítica e Infraestructura de Datos', desc: '¿Cuál es la misión de la Flota 2: Analítica e Infraestructura de Datos?', tags: ['Kahoot: lanza la pregunta asociada a Flota 2'] },
-            MISION3: { type: 'mision', title: 'Misión 3 – Infraestructura de Datos Espaciales', desc: '¿Cuál es la misión de la Flota 3: Infraestructura de Datos Espaciales?', tags: ['Kahoot: lanza la pregunta asociada a Flota 3'] },
-            MISION4: { type: 'mision', title: 'Misión 4 – Estudios Estratégicos', desc: '¿Cuál es la misión de la Flota 4: Estudios Estratégicos?', tags: ['Kahoot: lanza la pregunta asociada a Flota 4'] },
-            MISION5: { type: 'mision', title: 'Misión 5 – Uso y Apropiación', desc: '¿Cuál es la misión de la Flota 5: Uso y Apropiación?', tags: ['Kahoot: lanza la pregunta asociada a Flota 5'] },
+            MISION1: {
+                type: 'mision', title: 'Misión 1 – Políticas',
+                desc: '¿Cómo logramos que la tecnología sea parte del día a día y que todos la hagan propia?',
+                cover: 'assets/img/slides/slide_mision_1.png',
+                extra: '“Las tecnologías no transforman por sí solas: su poder nace cuando las personas las entienden, las usan y las hacen propias.”',
+                tags: ['Kahoot: pregunta asociada a Flota 1']
+            },
+            MISION2: {
+                type: 'mision', title: 'Misión 2 – Servicios',
+                desc: 'Pregunta asociada a Flota 2.',
+                cover: 'assets/img/slides/slide_mision_2.png', extra: 'Texto de apoyo.', tags: ['Kahoot']
+            },
+            MISION3: {
+                type: 'mision', title: 'Misión 3 – Gestión del Conocimiento e Innovación',
+                desc: 'Pregunta asociada a Flota 3.',
+                cover: 'assets/img/slides/slide_mision_3.png', extra: 'Texto de apoyo.', tags: ['Kahoot']
+            },
+            MISION4: {
+                type: 'mision', title: 'Misión 4 – Infraestructura',
+                desc: 'Pregunta asociada a Flota 4.',
+                cover: 'assets/img/slides/slide_mision_4.png', extra: 'Texto de apoyo.', tags: ['Kahoot']
+            },
+            MISION5: {
+                type: 'mision', title: 'Misión 5 – Plan de acción para la estrategia de Gobierno y Monitoreo del dato',
+                desc: 'Pregunta asociada a Flota 5.',
+                cover: 'assets/img/slides/slide_mision_5.png', extra: 'Texto de apoyo.', tags: ['Kahoot']
+            },
+        };
+
+        const ESPECIALES = {
+            MAPA: {
+                type: 'special', title: 'Mapa de Misiones',
+                cover: 'assets/img/slides/slide_mapa.png',
+                extra: 'Este mapa resume la travesía: conexiones, dependencias y próximos hitos.'
+            },
+            CAPITAN: {
+                type: 'special', title: 'Mensaje del Capitán',
+                cover: 'assets/img/fotos/foto_jorgecap.png', // deja vacío si no quieres imagen
+                extra: '“Cuidar los datos, entenderlos y usarlos bien: así construimos confianza y tomamos mejores decisiones.”​'
+            }
         };
 
         /* ===== Estado / elementos ===== */
@@ -861,7 +949,7 @@
         const btnFlotaContinue = document.getElementById('btnFlotaContinue');
         const btnFlotaSkip = document.getElementById('btnFlotaSkip');
 
-        // Referencias Showcase Misión
+        // Misión / Especiales
         const misionBackdrop = document.getElementById('misionBackdrop');
         const misionImg = document.getElementById('misionImg');
         const misionBanner = document.getElementById('misionBanner');
@@ -869,8 +957,15 @@
         const btnMisionContinue = document.getElementById('btnMisionContinue');
         const btnMisionSkip = document.getElementById('btnMisionSkip');
 
+        // QR
+        const qrBackdrop = document.getElementById('qrBackdrop');
+        const qrBanner = document.getElementById('qrBanner');
+        const qrImgEl = document.getElementById('qrImg');
+        const qrDescEl = document.getElementById('qrDesc');
+        const btnQrOpen = document.getElementById('btnQrOpen');
+        const btnQrClose = document.getElementById('btnQrClose');
 
-        const LS_KEY = 'bn-10x10-scripted-v1';
+        const LS_KEY = 'bn-10x10-scripted-v2';
 
         const assignments = {};
         let linearVisited = [];
@@ -931,34 +1026,54 @@
             const script = SCRIPTED_ORDER[state.scriptIndex] || 'MISS';
             let outcome = { kind: 'miss' };
 
-            if (script.startsWith('FLOTA') && FLOTAS[script]) { outcome = { kind: 'hit', key: script }; }
-            else if (script.startsWith('MISION') && MISIONES[script]) { outcome = { kind: 'hit', key: script }; }
-            else { outcome = { kind: 'miss' }; }
+            if (FLOTAS[script]) outcome = { kind: 'hit', key: script };
+            else if (MISIONES[script]) outcome = { kind: 'hit', key: script };
+            else if (ESPECIALES[script]) outcome = { kind: 'hit', key: script };
+            else outcome = { kind: 'miss' };
 
             assignments[id] = outcome;
             state.scriptIndex = Math.min(state.scriptIndex + 1, SCRIPTED_ORDER.length);
 
             showResultScreen(outcome, () => {
                 markVisited(id, outcome);
-                if (outcome.kind === 'hit') {
-                    const info = getInfoFromAssignment(outcome);
-                    state.current = id;
-                    if (outcome.key.startsWith('FLOTA') && !shownFlotaShowcase.has(outcome.key)) {
-                        shownFlotaShowcase.add(outcome.key);
-                        // Flota -> Misión -> Modal
-                        openFlotaShowcase(info, () => openMisionShowcase(info, () => openModal(info, id)));
-                    } else {
-                        openModal(info, id);
-                    }
+                if (outcome.kind !== 'hit') return;
 
+                state.current = id;
+
+                if (FLOTAS[outcome.key]) {
+                    const flota = FLOTAS[outcome.key];
+                    // 1) Flota (barco + tripulación)
+                    openFlotaShowcase(flota, () => {
+                        // 2) QR (si hay)
+                        if (flota.qrImg) {
+                            openFlotaQRShowcase(flota, () => {
+                                // 3) Ficha de flota (modal personalizado)
+                                openFlotaFicha(flota, () => { /* volver al tablero */ });
+                            });
+                        } else {
+                            openFlotaFicha(flota, () => { });
+                        }
+                    });
+
+                } else if (MISIONES[outcome.key]) {
+                    const mision = MISIONES[outcome.key];
+                    openMisionShowcase(mision, () => openModal(mision));
+
+                } else if (ESPECIALES[outcome.key]) {
+                    if (outcome.key === 'CAPITAN') {
+                        openSpecialShowcase(ESPECIALES.CAPITAN, () => { showFinalScreen(); });
+                    } else {
+                        openSpecialShowcase(ESPECIALES[outcome.key], () => { });
+                    }
                 }
             });
         }
 
         function getInfoFromAssignment(a) {
             if (a.kind !== 'hit') return null;
-            if (a.key.startsWith('FLOTA')) return FLOTAS[a.key];
-            if (a.key.startsWith('MISION')) return MISIONES[a.key];
+            if (FLOTAS[a.key]) return FLOTAS[a.key];
+            if (MISIONES[a.key]) return MISIONES[a.key];
+            if (ESPECIALES[a.key]) return ESPECIALES[a.key];
             return null;
         }
 
@@ -968,7 +1083,7 @@
             resultCard.classList.remove('hit', 'miss');
             resultCard.classList.add(isHit ? 'hit' : 'miss');
             resultTitle.textContent = isHit ? '¡IMPACTO!' : '¡FALLÓ!';
-            resultSub.textContent = isHit ? 'Abriendo bitácora del capitan…' : 'Sigue intentando.';
+            resultSub.textContent = isHit ? 'Abriendo bitácora del capitán…' : 'Sigue intentando.';
             resultBackdrop.style.display = 'grid';
             resultBackdrop.setAttribute('aria-hidden', 'false');
 
@@ -979,7 +1094,7 @@
             }, 850);
         }
 
-        /* ===== Modal ===== */
+        /* ===== Modal genérico (ficha flota / misión corta) ===== */
         function openModal(info) {
             if (!info) return;
 
@@ -994,11 +1109,15 @@
             if (info.type === 'flota') {
                 modalTitle.textContent = info.title;
                 modalDesc.textContent = info.desc || '';
-                modalHint.textContent = 'Exponer brevemente las funciones y roles de la flota. (Los tripulantes deben prestar atención: habrá una misión en Kahoot sobre esta flota).';
-            } else {
+                modalHint.textContent = info.flotaHint || '';
+            } else if (info.type === 'mision') {
                 modalTitle.textContent = info.title || 'Misión';
                 modalDesc.textContent = info.desc || '';
                 modalHint.textContent = 'Vamos a Kahoot para completar la misión. Al finalizar, regresa y presiona “Cerrar”.';
+            } else {
+                modalTitle.textContent = info.title || '';
+                modalDesc.textContent = info.extra || '';
+                modalHint.textContent = '';
             }
 
             backdrop.style.display = 'grid';
@@ -1009,15 +1128,10 @@
         function closeModal() {
             backdrop.style.display = 'none';
             backdrop.setAttribute('aria-hidden', 'true');
-
-            if (state.current) {
-                const a = assignments[state.current];
-                if (a && a.key === 'MISION5') { showFinalScreen(); }
-            }
             state.current = null;
         }
 
-        /* ===== Showcase de FLOTA ===== */
+        /* ===== FLOTA: Barco + tripulación ===== */
         function openFlotaShowcase(flotaInfo, onContinue) {
             flotaCover.src = flotaInfo.cover || '';
             flotaCover.alt = `Barco – ${flotaInfo.area || ''}`;
@@ -1025,34 +1139,13 @@
 
             crewGrid.innerHTML = '';
             (flotaInfo.crew || []).forEach(member => {
-                const item = document.createElement('div');
-                item.className = 'crew-item';
-
-                const av = document.createElement('div');
-                av.className = 'crew-avatar';
-
-                if (member.photo) {
-                    const img = document.createElement('img');
-                    img.src = member.photo;
-                    img.alt = member.name || 'Tripulante';
-                    av.appendChild(img);
-                } else {
-                    const initials = (member.name || 'Tripulante')
-                        .split(/\s+/).map(w => w[0]?.toUpperCase() || '').slice(0, 2).join('');
-                    av.textContent = initials || 'T';
-                }
-
-                const nameEl = document.createElement('div');
-                nameEl.className = 'crew-name';
-                nameEl.textContent = member.name || 'Tripulante';
-
-                const roleEl = document.createElement('div');
-                roleEl.className = 'crew-role';
-                roleEl.textContent = member.role || '';
-
-                item.appendChild(av);
-                item.appendChild(nameEl);
-                item.appendChild(roleEl);
+                const item = document.createElement('div'); item.className = 'crew-item';
+                const av = document.createElement('div'); av.className = 'crew-avatar';
+                if (member.photo) { const img = document.createElement('img'); img.src = member.photo; img.alt = member.name || 'Tripulante'; av.appendChild(img); }
+                else { const initials = (member.name || 'T').split(/\s+/).map(w => w[0]?.toUpperCase() || '').slice(0, 2).join(''); av.textContent = initials || 'T'; }
+                const nameEl = document.createElement('div'); nameEl.className = 'crew-name'; nameEl.textContent = member.name || 'Tripulante';
+                const roleEl = document.createElement('div'); roleEl.className = 'crew-role'; roleEl.textContent = member.role || '';
+                item.appendChild(av); item.appendChild(nameEl); item.appendChild(roleEl);
                 crewGrid.appendChild(item);
             });
 
@@ -1068,30 +1161,47 @@
             btnFlotaSkip.onclick = cont;
         }
 
-        function openMisionShowcase(flotaInfo, onContinue) {
-            // Título/banner
-            // Resultado: "Misión de la Flota 1: Planificación de la Información"
-            const tituloFlota = flotaInfo.title || 'Flota';
-            // Normaliza "Flota 1: ..." -> "Flota 1"
-            const label = (tituloFlota.split(':')[0] || 'Flota').trim();
-            misionBanner.textContent = `Misión de la ${label}: ${flotaInfo.area || ''}`;
+        /* ===== FLOTA: QR 15/70/15 ===== */
+        function openFlotaQRShowcase(flotaInfo, onContinue) {
+            qrBanner.textContent = flotaInfo.qrTop || `Tarea de la ${flotaInfo.title || 'Flota'}`;
+            qrImgEl.src = flotaInfo.qrImg || '';
+            qrDescEl.textContent = flotaInfo.qrHint || 'Ingresa al QR y ayuda con la misión de la Flota.';
+            if (flotaInfo.qrLink) { btnQrOpen.style.display = 'inline-flex'; btnQrOpen.href = flotaInfo.qrLink; }
+            else { btnQrOpen.style.display = 'none'; }
 
-            // Imagen y texto
-            misionImg.src = driveToDirect(flotaInfo.misionImg || '');
-            misionImg.onerror = () => {
-                misionImg.removeAttribute('src');
-                document.getElementById('misionDesc').textContent =
-                    'No pudimos cargar la imagen desde Drive. Verifica que el enlace esté compartido como “Cualquiera con el enlace – Lector”.';
+            qrBackdrop.style.display = 'grid';
+            qrBackdrop.setAttribute('aria-hidden', 'false');
+
+            const close = () => {
+                qrBackdrop.style.display = 'none';
+                qrBackdrop.setAttribute('aria-hidden', 'true');
+                onContinue && onContinue();   // ⬅️ vuelve al flujo normal
             };
+            btnQrClose.onclick = close;   // ⬅️ botón CONTINUAR funciona aquí
+        }
 
-            ;
-            misionDesc.textContent = flotaInfo.misionDesc || 'Explicación pendiente.';
+        /* ===== FLOTA: Ficha personalizada (usa modal genérico) ===== */
+        function openFlotaFicha(flotaInfo, onClose) {
+            modalTags.innerHTML = '';
+            (flotaInfo.tags || []).forEach(t => {
+                const tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = t; modalTags.appendChild(tag);
+            });
+            modalTitle.textContent = flotaInfo.title;
+            modalDesc.textContent = flotaInfo.desc || '';
+            modalHint.textContent = flotaInfo.flotaHint || '';
+            backdrop.style.display = 'grid'; backdrop.setAttribute('aria-hidden', 'false');
+            btnClose.onclick = () => { closeModal(); onClose && onClose(); };
+        }
 
-            // Mostrar
+        /* ===== MISIÓN 80/20 ===== */
+        function openMisionShowcase(misionInfo, onContinue) {
+            misionBanner.textContent = misionInfo.title || 'Misión';
+            if (misionInfo.cover) { misionImg.src = misionInfo.cover; misionImg.style.display = 'block'; }
+            else { misionImg.removeAttribute('src'); misionImg.style.display = 'none'; }
+            misionDesc.textContent = misionInfo.extra || misionInfo.desc || 'Explicación pendiente.';
             misionBackdrop.style.display = 'grid';
             misionBackdrop.setAttribute('aria-hidden', 'false');
 
-            // Cierre
             const closeMision = () => {
                 misionBackdrop.style.display = 'none';
                 misionBackdrop.setAttribute('aria-hidden', 'true');
@@ -1101,6 +1211,23 @@
             btnMisionSkip.onclick = closeMision;
         }
 
+        /* ===== ESPECIALES (Mapa / Capitán) ===== */
+        function openSpecialShowcase(info, onContinue) {
+            misionBanner.textContent = info.title || '';
+            if (info.cover) { misionImg.src = info.cover; misionImg.style.display = 'block'; }
+            else { misionImg.removeAttribute('src'); misionImg.style.display = 'none'; }
+            misionDesc.textContent = info.extra || '';
+            misionBackdrop.style.display = 'grid';
+            misionBackdrop.setAttribute('aria-hidden', 'false');
+
+            const close = () => {
+                misionBackdrop.style.display = 'none';
+                misionBackdrop.setAttribute('aria-hidden', 'true');
+                onContinue && onContinue();
+            };
+            btnMisionContinue.onclick = close;
+            btnMisionSkip.onclick = close;
+        }
 
         /* ===== Final ===== */
         function showFinalScreen() { document.getElementById('finalBackdrop').style.display = 'grid'; }
@@ -1117,8 +1244,8 @@
                 const marker = cellEl.querySelector('.marker');
 
                 if (outcome.kind === 'hit') {
-                    cellEl.classList.add('hit');
                     const info = getInfoFromAssignment(outcome);
+                    cellEl.classList.add('hit');
                     marker.textContent = (info && info.type === 'flota') ? '🚢 ✔️' : '🎯 ✔️';
                     marker.setAttribute('title', 'IMPACTO!');
                     state.hits++;
@@ -1130,7 +1257,6 @@
                 }
             }
             updateHUD();
-            maybeFinish();
             persistState();
         }
 
@@ -1142,7 +1268,7 @@
             if (progressText) progressText.textContent = `${total} / 100 descubiertas`;
             if (statusEl) statusEl.textContent = total === 100 ? 'Completado' : (total > 0 ? 'En progreso' : 'Listo para jugar');
         }
-        function maybeFinish() { /* opcional: toast cuando llegue a 100 */ }
+
         function persistState() {
             try {
                 const data = { a: assignments, v: [...state.visited], lv: linearVisited, h: state.hits, m: state.misses, si: state.scriptIndex, sf: [...shownFlotaShowcase] };
@@ -1235,19 +1361,6 @@
         /* Init */
         buildBoard();
         resizeGrid();
-
-        function driveToDirect(url) {
-            if (!url) return '';
-            // share link: https://drive.google.com/file/d/<ID>/view?...  ->  uc?export=view&id=<ID>
-            const m = url.match(/\/d\/([^/]+)\//);
-            if (m && m[1]) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
-            // ?id=<ID>
-            const p = new URL(url, window.location.origin);
-            const id = p.searchParams.get('id');
-            if (id) return `https://drive.google.com/uc?export=view&id=${id}`;
-            return url; // si ya es directo o no es Drive
-        }
-
     </script>
 </body>
 
